@@ -53,6 +53,8 @@
 #  include <GL/glut.h>
 #endif
 
+#include <png.h>
+
 #include <AR/config.h>
 #include <AR/video.h>
 #include <AR/param.h>			// arParamDisp()
@@ -103,9 +105,9 @@ static ObjectData_T	*gObjectData;
 static int			gObjectDataCount;
 
 // *** Changed ***
-int Cnt[31];
-int Disp[31][31];
-ARMarkerInfo Marker_store[31][31];
+static int Cnt[31];
+static int Disp[31][31];
+static ARMarkerInfo Marker_store[31][31];
 
 // ============================================================================
 //	Functions
@@ -358,6 +360,109 @@ static void Visibility(int visible)
 	}
 }
 
+GLuint read_png_file(char* file_name)
+{
+	char header[8];
+	int k;
+	GLuint textureID;
+	int width, height;
+	png_byte color_type;
+	png_byte bit_depth;
+	png_structp png_ptr; 
+	png_infop info_ptr;
+	int number_of_passes;
+	png_bytep * row_pointers;
+	int row = 0, col = 0, pos = 0;
+	GLubyte *rgba;
+
+	FILE *fp = fopen(file_name, "rb");
+	if(!fp) { fclose(fp); return 0; }
+    fread(header, 1, 8, fp);
+	//if(png_sig_cmp(header, 0, 8)) { fclose(fp); return 0; }
+		
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
+	if (!png_ptr) { fclose(fp); return 0; }
+ 
+	info_ptr = png_create_info_struct(png_ptr);
+	if(!info_ptr)
+	{
+		png_destroy_read_struct(&png_ptr,(png_infopp)NULL,(png_infopp)NULL);
+		fclose(fp);
+		return 0;
+	}
+
+    if (setjmp(png_jmpbuf(png_ptr)))
+	{
+         png_destroy_read_struct(&png_ptr,(png_infopp)NULL,(png_infopp)NULL);
+         fclose(fp);
+         return 0;
+     }
+ 
+	png_init_io(png_ptr,fp);
+ 
+    png_set_sig_bytes(png_ptr, 8);
+ 
+    png_read_info(png_ptr, info_ptr);
+
+    width = png_get_image_width(png_ptr, info_ptr);
+    height = png_get_image_height(png_ptr, info_ptr);
+	color_type = png_get_color_type(png_ptr, info_ptr);
+	
+	//if (color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+		//png_set_swap_alpha(png_ptr);
+    
+	bit_depth = png_get_bit_depth(png_ptr, info_ptr);
+ 
+	number_of_passes = png_set_interlace_handling(png_ptr);
+ 
+	png_read_update_info(png_ptr, info_ptr);
+
+	if (setjmp(png_jmpbuf(png_ptr))) { fclose(fp); return 0; }
+
+    rgba = (GLubyte *)malloc(width * height * 4 * sizeof(GLubyte));
+ 
+	row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
+ 
+	for (k = 0; k < height; k++) row_pointers[k] = NULL;
+  
+	for (k = 0; k < height; k++)
+		row_pointers[k] = (png_byte*)malloc(png_get_rowbytes(png_ptr,info_ptr));
+		//row_pointers[k] = png_malloc(png_ptr, png_get_rowbytes(png_ptr, info_ptr));
+ 
+    png_read_image(png_ptr, row_pointers);
+
+    pos = (width * height * 4) - (4 * width);
+    for (row = 0; row < height; row++)
+    {
+        for (col = 0; col < (4 * width); col += 4)
+        {
+			rgba[pos++] = row_pointers[row][col];        // red
+			rgba[pos++] = row_pointers[row][col + 1];    // green
+			rgba[pos++] = row_pointers[row][col + 2];    // blue
+			rgba[pos++] = row_pointers[row][col + 3];    // alpha
+		}
+        pos = (pos - (width * 4) * 2); 
+	}
+
+	glEnable(GL_TEXTURE_2D);
+ 
+	glGenTextures(1,&textureID);
+ 
+	glBindTexture(GL_TEXTURE_2D,textureID);
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,rgba);
+ 
+    //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+ 
+	free(row_pointers); 
+	fclose(fp);
+    return textureID;
+}
+
+
 //
 //	This function is called when the
 //	GLUT window is resized.
@@ -375,7 +480,7 @@ static void Reshape(int w, int h)
 	// Call through to anyone else who needs to know about window sizing here.
 }
 
-inline void Game_Over()
+static void Game_Over()
 {
 	if (Cnt[0] == 2) printf("Player 2 Win !");
 	if (Cnt[1] == 2) printf("Player 1 Win !");
@@ -384,6 +489,7 @@ inline void Game_Over()
 //
 // This function is called when the window needs redrawing.
 //
+
 static void Display(void)
 {
 	int i;
@@ -443,10 +549,16 @@ static void Display(void)
 	} // gPatt_found
 	
 	// Any 2D overlays go here.
-	//none
-	
-
-
+	glOrtho(-100, 100, -100, 100, -100, 100);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, read_png_file("Win.png"));
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-60.0f, -60.0f); 
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(60.0f, -60.0f); 
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(60.0f, 60.0f); 
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-60.0f, 60.0f); 
+	glDisable(GL_TEXTURE_2D);
+	glEnd();
 	glutSwapBuffers();
 }
 
