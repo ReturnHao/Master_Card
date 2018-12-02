@@ -1,0 +1,20 @@
+#the number of patterns to be recognized
+3
+
+#pattern 1
+VRML Wrl/man1.dat
+Data/patt.man1
+80.0
+0.0 0.0
+
+#pattern 2
+VRML Wrl/man2.dat
+Data/patt.man2
+80.0
+0.0 0.0
+
+#pattern 3
+VRML Wrl/rocket.dat
+Data/patt.trap1
+80.0
+0.0 0.0

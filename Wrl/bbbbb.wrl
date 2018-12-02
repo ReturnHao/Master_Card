@@ -1,0 +1,123 @@
+#VRML V2.0 utf8
+
+# Cyberdelia 6.4
+# Takeshi Onishi
+# http://www.cyberdelia.net/
+# takeshi@cyberdelia.net
+
+DEF T_obj1 Transform {
+	children [
+	DEF RZ_obj1 Transform {
+	center 0.000000 0.000000 0.000000
+	children [
+	DEF RY_obj1 Transform {
+	center 0.000000 0.000000 0.000000
+	children [
+	DEF RX_obj1 Transform {
+	center 0.000000 0.000000 0.000000
+	children [
+	DEF S_obj1 Transform {
+	center 0.000000 0.000000 0.000000
+	children [
+		Shape {
+			appearance Appearance {
+				material Material {
+					diffuseColor 0.800000 0.800000 0.800000
+					ambientIntensity 1.000000
+					specularColor 0.000000 0.000000 0.000000
+					emissiveColor 0.000000 0.000000 0.000000
+					shininess 1.000000
+				}
+			}
+			geometry IndexedFaceSet {
+				coord Coordinate {
+					point [
+						-100.000000 12.200000 100.000000,
+						100.000000 12.200000 100.000000,
+						100.000000 -12.200000 100.000000,
+						-100.000000 -12.200000 100.000000,
+						100.000000 12.200000 100.000000,
+						100.000000 12.200000 -100.000000,
+						100.000000 -12.200000 -100.000000,
+						100.000000 -12.200000 100.000000,
+						100.000000 12.200000 -100.000000,
+						-100.000000 12.200000 -100.000000,
+						-100.000000 -12.200000 -100.000000,
+						100.000000 -12.200000 -100.000000,
+						-100.000000 12.200000 -100.000000,
+						-100.000000 12.200000 100.000000,
+						-100.000000 -12.200000 100.000000,
+						-100.000000 -12.200000 -100.000000,
+						-100.000000 12.200000 -100.000000,
+						100.000000 12.200000 -100.000000,
+						100.000000 12.200000 100.000000,
+						-100.000000 12.200000 100.000000,
+						-100.000000 -12.200000 100.000000,
+						100.000000 -12.200000 100.000000,
+						100.000000 -12.200000 -100.000000,
+						-100.000000 -12.200000 -100.000000,
+					]
+				}
+				coordIndex [
+					3, 2, 1, 0, -1,
+					7, 6, 5, 4, -1,
+					11, 10, 9, 8, -1,
+					15, 14, 13, 12, -1,
+					19, 18, 17, 16, -1,
+					23, 22, 21, 20, -1,
+				]
+				creaseAngle 1.038471
+			}
+		}
+	]	}
+	]	}
+	]	}
+	]	}
+]	}
+
+
+DEF TS_bbbbb TimeSensor {
+	cycleInterval 2.000000
+	loop TRUE
+}
+DEF PI_obj1 PositionInterpolator {
+	key [ 0.0 ]
+	keyValue [
+		0.000000 0.000000 0.000000,
+	]
+}
+DEF OIX_obj1 OrientationInterpolator {
+	key [ 0.0 ]
+	keyValue [
+		1.0 0.0 0.0 0.000000,
+	]
+}
+DEF OIY_obj1 OrientationInterpolator {
+	key [ 0.0 ]
+	keyValue [
+		0.0 1.0 0.0 0.000000,
+	]
+}
+DEF OIZ_obj1 OrientationInterpolator {
+	key [ 0.0 ]
+	keyValue [
+		0.0 0.0 1.0 0.000000,
+	]
+}
+DEF PIS_obj1 PositionInterpolator {
+	key [ 0.0 ]
+	keyValue [
+		1.000000 1.000000 1.000000,
+	]
+}
+ROUTE TS_bbbbb.fraction_changed TO PI_obj1.set_fraction
+ROUTE PI_obj1.value_changed TO T_obj1.translation
+ROUTE TS_bbbbb.fraction_changed TO OIX_obj1.set_fraction
+ROUTE OIX_obj1.value_changed TO RX_obj1.rotation
+ROUTE TS_bbbbb.fraction_changed TO OIY_obj1.set_fraction
+ROUTE OIY_obj1.value_changed TO RY_obj1.rotation
+ROUTE TS_bbbbb.fraction_changed TO OIZ_obj1.set_fraction
+ROUTE OIZ_obj1.value_changed TO RZ_obj1.rotation
+ROUTE TS_bbbbb.fraction_changed TO PIS_obj1.set_fraction
+ROUTE PIS_obj1.value_changed TO S_obj1.set_scale
+
