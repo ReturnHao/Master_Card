@@ -1,5 +1,5 @@
 #the number of patterns to be recognized
-3
+6
 
 #pattern 1
 VRML Wrl/man1.dat
@@ -15,6 +15,39 @@ Data/patt.man2
 
 #pattern 3
 VRML Wrl/rocket.dat
-Data/patt.trap1
+Data/patt.rocket
 80.0
 0.0 0.0
+
+#pattern 4
+VRML Wrl/grass.dat
+Data/patt.grass
+80.0
+0.0 0.0
+
+#pattern 5
+VRML Wrl/portion.dat
+Data/patt.portion
+80.0
+0.0 0.0
+
+#pattern 6
+VRML Wrl/shield.dat
+Data/patt.shield
+80.0
+0.0 0.0
+
+#pattern 7
+VRML Wrl/tree.dat
+Data/patt.tree
+80.0
+0.0 0.0
+
+#pattern 8
+VRML Wrl/rock.dat
+Data/patt.rock
+80.0
+0.0 0.0
+
+
+
