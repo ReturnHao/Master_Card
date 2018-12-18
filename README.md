@@ -9,3 +9,7 @@ RM2C Lab Graduation Research 1 Porject: A simple AR game based on ARTookit &amp;
     - Merge local file with git file.
     - Model & Pattern file <Grass, Portion, Shield> updated.
     - Png file read problem still remain.
+
+### Feb Dec 18 2018 on Return@Windows
+
+	- Png file display problem elimated.
