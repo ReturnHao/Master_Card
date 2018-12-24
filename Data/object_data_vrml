@@ -1,5 +1,5 @@
 #the number of patterns to be recognized
-6
+8
 
 #pattern 1
 VRML Wrl/man1.dat
@@ -26,8 +26,8 @@ Data/patt.grass
 0.0 0.0
 
 #pattern 5
-VRML Wrl/portion.dat
-Data/patt.portion
+VRML Wrl/poison.dat
+Data/patt.poison
 80.0
 0.0 0.0
 

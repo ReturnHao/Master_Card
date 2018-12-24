@@ -13,3 +13,9 @@ RM2C Lab Graduation Research 1 Porject: A simple AR game based on ARTookit &amp;
 ### Feb Dec 18 2018 on Return@Windows
 
 	- Png file display problem elimated.
+
+### Tue Dec 25 2018 on RM2C@Windows
+
+	- Model parameter modified.
+	- Tree & Rock model files created.
+

@@ -1,4 +1,4 @@
 shield.wrl
 0.0 0.0 0.0		# Translation
-90.0 1.0 1.0 1.0	# Rotation
-25 25 25		# Scale
+90. 2.0 0.0 0.0		# Rotation
+80 80 80		# Scale
